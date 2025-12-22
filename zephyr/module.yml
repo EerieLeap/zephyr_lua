@@ -1,0 +1,4 @@
+name: eerie_leap_lua
+build:
+  cmake: .
+  kconfig: Kconfig.lua_module
