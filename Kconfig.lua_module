@@ -3,8 +3,54 @@ menu "EerieLeap Lua"
 config LUA
     bool "Lua support"
     help
-      Enable Lua support. This is required for the Lua scripting engine.
-      If you enable this option, you will be able to use Lua scripts.
+      Build the Lua interpreter (upstream Lua, lua/ submodule) as a Zephyr
+      library. Sources are compiled as C++ and need CONFIG_CPP_EXCEPTIONS.
+
+if LUA
+
+config LUA_32BITS
+    bool "32-bit numbers (float and int32)"
+    default y
+    help
+      lua_Number is float and lua_Integer is 32-bit, which matches a
+      single-precision FPU and the sensor pipeline. Off means double and
+      64-bit integers, as upstream builds by default.
+
+menu "Standard libraries"
+
+# table, string, math and utf8 are always built; these are the optional ones.
+
+config LUA_LIB_BASE
+    bool "base library (pairs, tonumber, pcall, ...)"
+    default y
+
+config LUA_LIB_COROUTINE
+    bool "coroutine library"
+    default n
+
+config LUA_LIB_PACKAGE
+    bool "package library (require)"
+    default n
+
+config LUA_LIB_IO
+    bool "io library"
+    default n
+    help
+      Pulls stdio into the image.
+
+config LUA_LIB_OS
+    bool "os library"
+    default n
+    help
+      Needs OS stubs (time, getenv, ...) the targets do not provide.
+
+config LUA_LIB_DEBUG
+    bool "debug library"
+    default n
+
+endmenu
+
+endif # LUA
 
 module = EERIE_LEAP_LUA
 module-str = eerie_leap_lua
