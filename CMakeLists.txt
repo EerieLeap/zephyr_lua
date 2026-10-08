@@ -83,6 +83,10 @@ if(CONFIG_LUA)
 
     list(TRANSFORM LUA_SOURCES PREPEND "${LUA_SRC_DIR}/")
 
+    # Weak libc stubs (times() for the clock() call in ltablib.c's sort pivot seed, and the
+    # newlib file stubs); plain C, built on every target.
+    list(APPEND LUA_SOURCES "${LUA_MODULE_DIR}/src/stubs.c")
+
     # Global: every translation unit that includes luaconf.h must agree on the number types.
     zephyr_include_directories("${LUA_SRC_DIR}")
     if(CONFIG_LUA_32BITS)
@@ -94,5 +98,7 @@ if(CONFIG_LUA)
     zephyr_library()
     zephyr_library_sources(${LUA_SOURCES})
 
-    set_source_files_properties(${LUA_SOURCES} PROPERTIES LANGUAGE CXX)
+    set(LUA_CXX_SOURCES ${LUA_SOURCES})
+    list(REMOVE_ITEM LUA_CXX_SOURCES "${LUA_MODULE_DIR}/src/stubs.c")
+    set_source_files_properties(${LUA_CXX_SOURCES} PROPERTIES LANGUAGE CXX)
 endif()

@@ -15,6 +15,9 @@ the wrapper, the submodule records the Lua. Originally based on
 - Sources are compiled as C++, so `LUAI_THROW` is a C++ `throw` and `lua_error()` unwinds
   through C++ callers; the application needs `CONFIG_CPP_EXCEPTIONS`.
 - `LUA_COMPAT_*` switches are off, as upstream ships them.
+- `src/stubs.c` provides weak `times()` (picolibc) and newlib file stubs. `ltablib.c` seeds the
+  `table.sort` pivot with `clock()`, which picolibc implements over `times()`, so the stub is
+  needed even without the `io` and `os` libraries.
 
 Upgrading Lua: check out the new tag in `lua/`, confirm `patches/luaconf.patch` still applies
 (`git -C lua apply --check ../patches/luaconf.patch`), build, commit the gitlink.
