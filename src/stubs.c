@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <errno.h>
+#include <stdio.h>
 #include <sys/times.h>
 #include <zephyr/fs/fs.h>
 
@@ -15,93 +15,81 @@
  * "Operation not supported"; where they are on, Zephyr's strong definitions win.
  */
 
-
 #ifdef CONFIG_PICOLIBC
-#include <fcntl.h>
-#include <unistd.h>
+    #include <fcntl.h>
+    #include <unistd.h>
 
 clock_t times(struct tms* tms) __attribute__((weak));
-clock_t times(struct tms* tms)
-{
-	errno = ENOTSUP;
-	return (clock_t) -1;
-
+clock_t times(struct tms* tms) {
+    errno = ENOTSUP;
+    return (clock_t)-1;
 }
 
-int open(const char *pathname, int flags, ...) __attribute__((weak));
-int open(const char *pathname, int flags, ...)
-{
-	(void) pathname;
-	(void) flags;
-	errno = ENOTSUP;
-	return -1;
+int open(const char* pathname, int flags, ...) __attribute__((weak));
+int open(const char* pathname, int flags, ...) {
+    (void)pathname;
+    (void)flags;
+    errno = ENOTSUP;
+    return -1;
 }
 
 int close(int fd) __attribute__((weak));
-int close(int fd)
-{
-	(void) fd;
-	errno = ENOTSUP;
-	return -1;
+int close(int fd) {
+    (void)fd;
+    errno = ENOTSUP;
+    return -1;
 }
 
-ssize_t read(int fd, void *buf, size_t nbyte) __attribute__((weak));
-ssize_t read(int fd, void *buf, size_t nbyte)
-{
-	(void) fd;
-	(void) buf;
-	(void) nbyte;
-	errno = ENOTSUP;
-	return -1;
+ssize_t read(int fd, void* buf, size_t nbyte) __attribute__((weak));
+ssize_t read(int fd, void* buf, size_t nbyte) {
+    (void)fd;
+    (void)buf;
+    (void)nbyte;
+    errno = ENOTSUP;
+    return -1;
 }
 
-ssize_t write(int fd, const void *buf, size_t nbyte) __attribute__((weak));
-ssize_t write(int fd, const void *buf, size_t nbyte)
-{
-	(void) fd;
-	(void) buf;
-	(void) nbyte;
-	errno = ENOTSUP;
-	return -1;
+ssize_t write(int fd, const void* buf, size_t nbyte) __attribute__((weak));
+ssize_t write(int fd, const void* buf, size_t nbyte) {
+    (void)fd;
+    (void)buf;
+    (void)nbyte;
+    errno = ENOTSUP;
+    return -1;
 }
 
 off_t lseek(int fd, off_t offset, int whence) __attribute__((weak));
-off_t lseek(int fd, off_t offset, int whence)
-{
-	(void) fd;
-	(void) offset;
-	(void) whence;
-	errno = ENOTSUP;
-	return (off_t) -1;
+off_t lseek(int fd, off_t offset, int whence) {
+    (void)fd;
+    (void)offset;
+    (void)whence;
+    errno = ENOTSUP;
+    return (off_t)-1;
 }
 #endif
 
 #ifdef CONFIG_NEWLIB_LIBC
-int _link(const char *oldpath, const char *newpath) __attribute__((weak));
-int _link(const char *oldpath, const char *newpath)
-{
-	errno = ENOTSUP;
-	return -1;
+int _link(const char* oldpath, const char* newpath) __attribute__((weak));
+int _link(const char* oldpath, const char* newpath) {
+    errno = ENOTSUP;
+    return -1;
 }
 
-int _unlink(const char *pathname) __attribute__((weak));
-int _unlink(const char *pathname)
-{
-	errno = ENOTSUP;
-	return -1;
+int _unlink(const char* pathname) __attribute__((weak));
+int _unlink(const char* pathname) {
+    errno = ENOTSUP;
+    return -1;
 }
 
-int _open(const char *pathname) __attribute__((weak));
-int _open(const char *pathname)
-{
-	errno = ENOTSUP;
-	return -1;
+int _open(const char* pathname) __attribute__((weak));
+int _open(const char* pathname) {
+    errno = ENOTSUP;
+    return -1;
 }
 
-int _times(const char *pathname) __attribute__((weak));
-int _times(const char *pathname)
-{
-	errno = ENOTSUP;
-	return -1;
+int _times(const char* pathname) __attribute__((weak));
+int _times(const char* pathname) {
+    errno = ENOTSUP;
+    return -1;
 }
 #endif
